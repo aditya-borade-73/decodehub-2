@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decimal - DevToolkit</title>
+  <link rel="icon" href="/favicon2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-left">
+        <a href="/home.html" class="app-icon-link">
+          <div class="app-icon">
+            <img src="/favicon2.png" alt="logo" class="app-logo">
+          </div>
+        </a>
+        <div class="app-title-group">
+          <h1 class="app-title">Encode / Decode</h1>
+          <p class="app-subtitle">All-in-one encoding toolkit</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="/home.html" class="home-link">Home</a>
+        <span class="format-count">26 formats</span>
+        <button class="dark-toggle" id="darkToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+          <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- BODY -->
+    <div class="body">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-inner" id="sidebarList">
+          <!-- Text -->
+          <div class="category-label">Text</div>
+          <a href="/encode-decode/base64" class="sidebar-item">Base64</a>
+          <a href="/encode-decode/base64url" class="sidebar-item">Base64 URL</a>
+          <a href="/encode-decode/base32" class="sidebar-item">Base32</a>
+          <a href="/encode-decode/unicode-escape" class="sidebar-item">Unicode Escape</a>
+          <a href="/encode-decode/json-escape" class="sidebar-item">JSON Escape</a>
+          
+          <!-- URL -->
+          <div class="category-label">URL</div>
+          <a href="/encode-decode/url-encode" class="sidebar-item">URL Encode</a>
+          <a href="/encode-decode/url-full" class="sidebar-item">URL Full Encode</a>
+          
+          <!-- HTML -->
+          <div class="category-label">HTML</div>
+          <a href="/encode-decode/html-entities" class="sidebar-item">HTML Entities</a>
+          <a href="/encode-decode/html-full" class="sidebar-item">HTML Full Encode</a>
+          
+          <!-- Binary -->
+          <div class="category-label">Binary</div>
+          <a href="/encode-decode/hex" class="sidebar-item">Hex</a>
+          <a href="/encode-decode/binary" class="sidebar-item">Binary</a>
+          <a href="/encode-decode/octal" class="sidebar-item">Octal</a>
+          <a href="/encode-decode/decimal" class="sidebar-item selected">Decimal</a>
+          <a href="/encode-decode/ascii-codes" class="sidebar-item">ASCII Codes</a>
+          
+          <!-- Other -->
+          <div class="category-label">Other</div>
+          <a href="/encode-decode/sha256" class="sidebar-item">SHA-256</a>
+          <a href="/encode-decode/sha1" class="sidebar-item">SHA-1</a>
+          <a href="/encode-decode/md5" class="sidebar-item">MD5</a>
+          <a href="/encode-decode/rot13" class="sidebar-item">ROT13</a>
+          <a href="/encode-decode/rot47" class="sidebar-item">ROT47</a>
+          <a href="/encode-decode/atbash" class="sidebar-item">Atbash</a>
+          <a href="/encode-decode/morse" class="sidebar-item">Morse Code</a>
+          <a href="/encode-decode/caesar" class="sidebar-item">Caesar (ROT3)</a>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main">
+
+        <!-- TOOL HEADER -->
+        <div class="tool-header">
+          <div class="breadcrumb">
+            <a href="/home.html">Dev Toolkit</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">Binary</span>
+          </div>
+          <h1 class="tool-title">Decimal Encode / Decode</h1>
+          <p class="tool-subtitle" id="toolSubtitle">Encode and decode text using Decimal</p>
+        </div>
+
+        <!-- IO PANELS -->
+        <div class="io-row">
+
+          <!-- INPUT -->
+          <div class="io-panel input-panel">
+            <div class="io-top-bar">
+              <span class="io-label">INPUT</span>
+              <div class="io-top-actions">
+                <button class="text-btn sample-btn" id="sampleBtn">Sample</button>
+              </div>
+            </div>
+            <div class="textarea-wrap">
+              <textarea id="inputText" placeholder="Enter text to encode or decode..." spellcheck="false"></textarea>
+            </div>
+          </div>
+
+          <!-- OUTPUT -->
+          <div class="io-panel output-panel">
+            <div class="io-top-bar">
+              <span class="io-label">OUTPUT</span>
+              <div class="io-top-actions">
+                <button class="text-btn copy-btn" id="copyBtn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy
+                </button>
+              </div>
+            </div>
+            <div class="textarea-wrap">
+              <textarea id="outputText" placeholder="Result will appear here..." readonly spellcheck="false"></textarea>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-bar">
+          <div class="mode-buttons">
+            <button class="action-btn encode-btn active" id="encodeBtn">Encode</button>
+            <button class="action-btn decode-btn" id="decodeBtn">Decode</button>
+          </div>
+          <button class="text-btn clear-btn" id="clearBtn">Clear</button>
+        </div>
+
+        <!-- TOOL DESCRIPTION -->
+        <div class="tool-description">
+          <p>ASCII to decimal converter shows numeric values (0-127) for each character. Useful for understanding character encoding, programming, ASCII tables, and educational purposes. Displays the decimal representation of standard ASCII characters.</p>
+        </div>
+
+        <!-- INFO BAR -->
+        <div class="info-bar">
+          <p class="info-text"><strong id="infoName"></strong> <span id="infoDesc"></span></p>
+        </div>
+
+      </main>
+    </div>
+
+  </div>
+
+  <script>
+    // Tool configuration
+    const TOOL_ID = 'decimal';
+    const TOOL_NAME = 'Decimal';
+    // Save sidebar scroll position before leaving
+    const sidebar = document.getElementById('sidebarList');
+    if (sidebar) {
+      // Restore scroll position
+      const savedScroll = sessionStorage.getItem('sidebarScroll');
+      if (savedScroll) {
+        sidebar.scrollTop = parseInt(savedScroll);
+      }
+      
+      // Scroll selected item into view
+      const selected = sidebar.querySelector('.selected');
+      if (selected) {
+        selected.scrollIntoView({ block: 'center' });
+      }
+      
+      // Save scroll position on scroll
+      sidebar.addEventListener('scroll', () => {
+        sessionStorage.setItem('sidebarScroll', sidebar.scrollTop);
+      });
+    }
+  </script>
+  <script src="/app.js"></script>
+</body>
+</html>

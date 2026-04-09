@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevToolkit - Developer Toolkit</title>
+  <link rel="icon" href="/favicon2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #3b82f6;
+      --accent-dark: #2563eb;
+      --accent-bg: rgba(59, 130, 246, 0.15);
+      --bg: #faf9f7;
+      --surface: #ffffff;
+      --sidebar-bg: #f5f3f0;
+      --border: #e5e2de;
+      --text: #1a1a1a;
+      --text-secondary: #4a4a4a;
+      --text-muted: #6b6b6b;
+      --text-faint: #9a9a9a;
+      --badge-bg: rgba(59, 130, 246, 0.15);
+      --tool-title: #dc2626;
+      --encode-btn: #c2410c;
+      --encode-btn-dark: #ea580c;
+      --decode-btn: #6b7280;
+      --decode-btn-dark: #3b82f6;
+    }
+
+    .dark {
+      --accent: #60a5fa;
+      --accent-dark: #93c5fd;
+      --accent-bg: rgba(59, 130, 246, 0.2);
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --sidebar-bg: #1a1f2e;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      --badge-bg: rgba(59, 130, 246, 0.2);
+      --tool-title: #f87171;
+      --encode-btn: #ea580c;
+      --encode-btn-dark: #f97316;
+      --decode-btn: #9ca3af;
+      --decode-btn-dark: #3b82f6;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      left: 0;
+      top: 0;
+    }
+
+    .sidebar-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 6px #00ffcc);
+    }
+
+    .sidebar-brand {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 0;
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      margin-bottom: 8px;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-faint);
+      padding: 8px 20px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.15s ease;
+      border-left: 2px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: rgba(0,0,0,0.03);
+      color: var(--text);
+    }
+
+    .dark .nav-item:hover {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .nav-item.active {
+      background: rgba(59, 130, 246, 0.08);
+      color: var(--accent-dark);
+      border-left-color: var(--accent);
+    }
+
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      opacity: 0.7;
+    }
+
+    .nav-item.active .nav-icon {
+      opacity: 1;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-link {
+      font-size: 12px;
+      color: var(--text-faint);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--text-secondary);
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    .main {
+      flex: 1;
+      margin-left: 240px;
+      padding: 40px 48px;
+      max-width: 900px;
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero {
+      margin-bottom: 48px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-description {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 520px;
+      margin-bottom: 28px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .cta-button:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .cta-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ─── FEATURE CARDS ─── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+
+    .feature-icon.lock { background: rgba(245, 158, 11, 0.15); }
+    .feature-icon.bolt { background: rgba(59, 130, 246, 0.15); }
+    .feature-icon.globe { background: rgba(16, 185, 129, 0.15); }
+
+    .feature-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .feature-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── HOW TO USE ─── */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── AVAILABLE FORMATS ─── */
+    .formats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .format-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .format-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-faint);
+      margin-bottom: 12px;
+    }
+
+    .format-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .format-tag {
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .format-tag:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+
+    /* Dark mode toggle */
+    .dark-toggle {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s ease;
+    }
+
+    .dark-toggle:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .icon-moon { display: none; }
+    .dark .icon-sun { display: none; }
+    .dark .icon-moon { display: block; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        margin-left: 0;
+        padding: 24px;
+      }
+      .features {
+        grid-template-columns: 1fr;
+      }
+      .formats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-header-left">
+          <img src="favicon2.png" alt="DevToolkit" class="sidebar-logo">
+          <span class="sidebar-brand">DevToolkit</span>
+        </div>
+        <button class="dark-toggle" id="darkToggle" title="Toggle dark mode">
+          <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-label">Tools</div>
+          <a href="/encode-decode/base64" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            Encode / Decode
+          </a>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="footer-link">Privacy</a>
+        <a href="#" class="footer-link">About</a>
+        <a href="#" class="footer-link">Contact</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="badge">
+          <span>21 formats across 6 categories</span>
+        </div>
+        <h1 class="hero-title">Developer Toolkit</h1>
+        <p class="hero-description">Simple and fast encoding, decoding, and hashing tools running fully in your browser.</p>
+        <a href="/encode-decode/base64" class="cta-button">
+          Open Encode / Decode
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </section>
+
+      <!-- FEATURES -->
+      <section class="features">
+        <div class="feature-card">
+          <div class="feature-icon lock">🔒</div>
+          <h3 class="feature-title">No Data Stored</h3>
+          <p class="feature-description">Everything runs in your browser. Nothing is sent to any server.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon bolt">⚡</div>
+          <h3 class="feature-title">Instant Results</h3>
+          <p class="feature-description">All transformations happen locally in real time as you type.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon globe">🌐</div>
+          <h3 class="feature-title">Client-Side Only</h3>
+          <p class="feature-description">Zero backend, zero dependencies at runtime. Works offline too.</p>
+        </div>
+      </section>
+
+      <!-- HOW TO USE -->
+      <section class="section">
+        <h2 class="section-title">How to use</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <p class="step-text">Pick an encoding from the sidebar (e.g. "Base64" or "Hex").</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <p class="step-text">Choose Encode or Decode mode at the top.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <p class="step-text">Type or paste your text — output appears instantly.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- AVAILABLE FORMATS -->
+      <section class="section">
+        <h2 class="section-title">Available Formats</h2>
+        <div class="formats-grid">
+          <div class="format-card">
+            <div class="format-label">Text</div>
+            <div class="format-tags">
+              <a href="/encode-decode/base64" class="format-tag">Base64</a>
+              <a href="/encode-decode/base64url" class="format-tag">Base64 URL</a>
+              <a href="/encode-decode/base32" class="format-tag">Base32</a>
+              <a href="/encode-decode/unicode-escape" class="format-tag">Unicode Escape</a>
+              <a href="/encode-decode/json-escape" class="format-tag">JSON Escape</a>
+            </div>
+          </div>
+          <div class="format-card">
+            <div class="format-label">URL</div>
+            <div class="format-tags">
+              <a href="/encode-decode/url-encode" class="format-tag">URL Encode</a>
+              <a href="/encode-decode/url-full" class="format-tag">URL Full Encode</a>
+            </div>
+          </div>
+          <div class="format-card">
+            <div class="format-label">HTML</div>
+            <div class="format-tags">
+              <a href="/encode-decode/html-entities" class="format-tag">HTML Entities</a>
+              <a href="/encode-decode/html-full" class="format-tag">HTML Full Encode</a>
+            </div>
+          </div>
+
+          <div class="format-card">
+            <div class="format-label">Other</div>
+            <div class="format-tags">
+              <a href="/encode-decode/sha256" class="format-tag">SHA-256</a>
+              <a href="/encode-decode/sha1" class="format-tag">SHA-1</a>
+              <a href="/encode-decode/md5" class="format-tag">MD5</a>
+              <a href="/encode-decode/rot13" class="format-tag">ROT13</a>
+              <a href="/encode-decode/rot47" class="format-tag">ROT47</a>
+              <a href="/encode-decode/atbash" class="format-tag">Atbash</a>
+              <a href="/encode-decode/morse" class="format-tag">Morse Code</a>
+              <a href="/encode-decode/caesar" class="format-tag">Caesar (ROT3)</a>
+            </div>
+          </div>
+          <div class="format-card">
+            <div class="format-label">Binary</div>
+            <div class="format-tags">
+              <a href="/encode-decode/hex" class="format-tag">Hex</a>
+              <a href="/encode-decode/binary" class="format-tag">Binary</a>
+              <a href="/encode-decode/octal" class="format-tag">Octal</a>
+              <a href="/encode-decode/decimal" class="format-tag">Decimal</a>
+              <a href="/encode-decode/ascii-codes" class="format-tag">ASCII Codes</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Dark mode toggle
+    const darkToggle = document.getElementById('darkToggle');
+    
+    function applyDark(on) {
+      document.documentElement.classList.toggle('dark', on);
+      localStorage.setItem('theme', on ? 'dark' : 'light');
+    }
+    
+    // Check saved theme
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyDark(savedTheme === 'dark' || (!savedTheme && prefersDark));
+    
+    darkToggle.addEventListener('click', () => {
+      applyDark(!document.documentElement.classList.contains('dark'));
+    });
+  </script>
+</body>
+</html>
